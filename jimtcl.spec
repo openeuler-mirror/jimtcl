@@ -1,12 +1,12 @@
 Name:           jimtcl
 Version:        0.78
-Release:        2
+Release:        3
 Summary:        A small embeddable Tcl interpreter
 License:        BSD
 URL:            http://jim.tcl.tk
 Source0:        https://github.com/msteveb/jimtcl/archive/%{version}/jimtcl-%{version}.tar.gz
 
-BuildRequires:  asciidoc
+BuildRequires:  asciidoc gcc
 
 %description
 Jim is an opensource small-footprint implementation of the Tcl programming language.
@@ -57,6 +57,9 @@ cd $RPM_BUILD_ROOT%{_libdir}; ln -s libjim.so.* libjim.so
 %exclude %{_libdir}/jim/{tcltest.tcl,README.extensions}
 
 %changelog
+* Thu Jun 03 2021 wulei <wulei80@huawei.com> - 0.78-3
+- fixes failed: Could not find a C compiler
+
 * Tue Nov 05 2019 Lijin Yang <yanglijin@huawei.com> - 0.78-2
 - inital package
 
