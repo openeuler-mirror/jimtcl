@@ -1,10 +1,14 @@
 Name:           jimtcl
 Version:        0.78
-Release:        3
+Release:        4
 Summary:        A small embeddable Tcl interpreter
 License:        BSD
 URL:            http://jim.tcl.tk
 Source0:        https://github.com/msteveb/jimtcl/archive/%{version}/jimtcl-%{version}.tar.gz
+%ifarch riscv64
+Patch0:         updata_config_guess.patch
+Patch1:         updata_config_sub.patch
+%endif
 
 BuildRequires:  asciidoc gcc
 
@@ -57,6 +61,11 @@ cd $RPM_BUILD_ROOT%{_libdir}; ln -s libjim.so.* libjim.so
 %exclude %{_libdir}/jim/{tcltest.tcl,README.extensions}
 
 %changelog
+* Tue Dec 21 2021 lvxiaoqian <xiaoqian@nj.iscas.ac.cn> - 0.78-4
+- update config for riscv
+- the latest config files come from http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD and http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
+- license:GPLv3
+
 * Thu Jun 03 2021 wulei <wulei80@huawei.com> - 0.78-3
 - fixes failed: Could not find a C compiler
 
