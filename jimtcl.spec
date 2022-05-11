@@ -1,8 +1,8 @@
 Name:           jimtcl
 Version:        0.78
-Release:        3
+Release:        4
 Summary:        A small embeddable Tcl interpreter
-License:        BSD
+License:        BSD-2-Clause-Views
 URL:            http://jim.tcl.tk
 Source0:        https://github.com/msteveb/jimtcl/archive/%{version}/jimtcl-%{version}.tar.gz
 
@@ -57,6 +57,9 @@ cd $RPM_BUILD_ROOT%{_libdir}; ln -s libjim.so.* libjim.so
 %exclude %{_libdir}/jim/{tcltest.tcl,README.extensions}
 
 %changelog
+* Wed May 11 2022 wulei <wulei80@h-partners.com> - 0.78-4
+- License compliance rectification
+
 * Thu Jun 03 2021 wulei <wulei80@huawei.com> - 0.78-3
 - fixes failed: Could not find a C compiler
 
