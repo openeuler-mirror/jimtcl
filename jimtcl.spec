@@ -1,6 +1,6 @@
 Name:           jimtcl
 Version:        0.78
-Release:        3
+Release:        4
 Summary:        A small embeddable Tcl interpreter
 License:        BSD
 URL:            http://jim.tcl.tk
@@ -27,6 +27,12 @@ This package contains libraries and header files for developing applications tha
 
 %build
 export CC=gcc LD=ld AR=ar RANLIB=ranlib STRIP=strip
+%ifarch loongarch64
+rm -rf autosetup/autosetup-config.sub
+rm -rf autosetup/autosetup-config.guess
+/usr/bin/cp -fv /usr/lib/rpm/openEuler/config.guess autosetup/autosetup-config.guess
+/usr/bin/cp -fv /usr/lib/rpm/openEuler/config.sub autosetup/autosetup-config.sub
+%endif
 %configure --full --shared --disable-option-checking
 %make_build
 
@@ -57,6 +63,9 @@ cd $RPM_BUILD_ROOT%{_libdir}; ln -s libjim.so.* libjim.so
 %exclude %{_libdir}/jim/{tcltest.tcl,README.extensions}
 
 %changelog
+* Wed Feb 8 2023 Wenlong Zhang<zhangwenlong@loongson.cn> - 0.78-4
+- update autosetup-config.guess and autosetup-config.sub to support loongarch
+
 * Thu Jun 03 2021 wulei <wulei80@huawei.com> - 0.78-3
 - fixes failed: Could not find a C compiler
 
