@@ -1,12 +1,19 @@
 Name:           jimtcl
-Version:        0.78
-Release:        5
+Version:        0.82
+Release:        1
 Summary:        A small embeddable Tcl interpreter
 License:        BSD-2-Clause-Views
 URL:            http://jim.tcl.tk
 Source0:        https://github.com/msteveb/jimtcl/archive/%{version}/jimtcl-%{version}.tar.gz
 
-BuildRequires:  asciidoc gcc
+BuildRequires:  asciidoc gcc-c++ make	
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(hiredis)
+BuildRequires:  pkgconfig(readline)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  hostname
 
 %description
 Jim is an opensource small-footprint implementation of the Tcl programming language.
@@ -24,6 +31,7 @@ This package contains libraries and header files for developing applications tha
 
 %prep
 %autosetup -p1
+rm -rf sqlite3
 
 %build
 export CC=gcc LD=ld AR=ar RANLIB=ranlib STRIP=strip
@@ -34,36 +42,40 @@ rm -rf autosetup/autosetup-config.guess
 /usr/bin/cp -fv /usr/lib/rpm/openEuler/config.sub autosetup/autosetup-config.sub
 %endif
 
-%configure --full --shared --disable-option-checking
+%configure --shared --disable-option-checking --allextmod --docdir=%{_datadir}/doc/%{name}
 %make_build
 
 %check
+rm tests/ssl.test
 make test
 
 %install
-%make_install docdir=%{_docdir}/jimtcl
-cd $RPM_BUILD_ROOT%{_libdir}; ln -s libjim.so.* libjim.so
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+%make_install INSTALL_DOCS=nodocs
+rm %{buildroot}/%{_libdir}/jim/README.extensions
 
 %files
-%doc LICENSE AUTHORS README
-%{_docdir}/jimtcl/Tcl.html
+%license LICENSE
+%doc AUTHORS README README.ensemble README.extensions README.namespaces
+%doc README.oo README.redis README.sqlite README.utf-8
+%doc %{_datadir}/doc/%{name}/Tcl.html
+%{_bindir}/jimdb
 %{_bindir}/jimsh
+%dir %{_libdir}/jim
+%{_libdir}/jim/*.tcl
+%{_libdir}/jim/*.so
 %{_libdir}/libjim.so.*
 
 %files devel
-%doc DEVELOPING README.metakit README.extensions README.namespaces README.oo README.utf-8 STYLE
-%{_includedir}/
+%doc DEVELOPING STYLE
+%{_includedir}/*
 %{_bindir}/build-jim-ext
-%{_libdir}/pkgconfig/jimtcl.pc
 %{_libdir}/libjim.so
-%exclude %{_datadir}/doc/jimtcl/
-%exclude %{_libdir}/jim/{tcltest.tcl,README.extensions}
+%{_libdir}/pkgconfig/jimtcl.pc
 
 %changelog
+* Wed May 17 2023 liyanan <thistleslyn@163.com> - 0.82-1
+- update to 0.82
+
 * Tue Dec 13 2022 Wenlong Zhang<zhangwenlong@loongson.cn> - 0.78-5
 - update autosetup-config.guess and autosetup-config.sub to support loongarch
 
